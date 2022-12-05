@@ -23,8 +23,8 @@
 			<c:forEach items="${boards}" var="boards">
 				<tr>
 					<td>${boards.num}</td>
-					<td><a href="view/${boards.num}">${boards.title}</a></td>
-					<td>${boards.content}</td>
+					<td><a href="view/${boards.num}">${boards.title}[${boards.replyCnt}]</a></td>
+					<td>${boards.writer}</td>
 					<td><fmt:formatDate value="${boards.regdate}" pattern="yyyy-MM-dd"/></td>
 					<td>${boards.hitcount}</td>
 				</tr>

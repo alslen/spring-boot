@@ -36,7 +36,7 @@ public class BoardServiceImpl implements BoardService{
 	// 수정
 	@Override
 	public void update(BoardDTO board) {
-		
+		bmapper.update(board);
 	}
 
 	// 삭제

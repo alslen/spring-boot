@@ -40,19 +40,94 @@
 		</td>
 	</tr>
 </table>
+<br><br>
+	<div align="center">
+		<textarea rows="4" cols="50" id="msg"></textarea>
+		<button type="button" id="btnComment" class="btn btn-success">댓글쓰기</button>
+	</div>
+	<hr>
+	댓글(<span id="replyCount"></span>)
+	<div id="replyResult"></div>
+</div>
+
 <script>
+
+// 댓글 전체보기 + 댓글 개수
+var init = function(){
+	$.ajax({
+		type:'get',
+		url:'/reply/commentList',
+		data:{"bnum":$("#num").val()}
+	}) //ajax
+	.done(function(resp){
+		var str = "<table class='table table-hove mt-3'>"
+		$.each(resp, function(key,val){
+			str += "<tr>"
+			str += "<td>"+val.userid+"</td>"
+			str += "<td>"+val.content+"</td> "
+			str += "<td>"+val.regdate+"</td>"
+			str += "<td><a href='javascript:fdel("+val.cnum+")'>삭제</a></td></tr>"
+		})  // each
+		$("#replyResult").html(str);
+		$("#replyCount").text(resp.count);
+	}) // done
+	.fail(function(e){
+		alert("실패")
+	})  // fail
+}
+
+// 댓글 삭제
+function fdel(cnum){
+	$.ajax({
+		type:'delete',
+		url:'/reply/del/'+cnum,
+		success:function(resp){
+			alert(resp+"번 글 삭제성공")
+			init();
+		},
+		error:function(e){
+			alert("삭제실패")
+		}
+		
+	})
+}
+
+// 댓글 추가
+$("#btnComment").click(function(){
+	if($("#msg").val()==""){
+		alert("댓글을 입력하세요")
+		return false;
+	}
+	var data = {
+			"bnum" : $("#num").val(),
+			"content" : $("#msg").val(),
+			"userid" :'aa'
+	}
+	$.ajax({
+		type:'post',
+		url:'/reply/commentInsert',
+		contentType:'application/json;charset=utf-8',
+		data:JSON.stringify(data)
+	}) // ajax
+	.done(function(resp){
+		alert("댓글추가 성공")
+		init();
+	})
+	.fail(function(e){
+		alert('댓글추가 실패')
+	})
+})  // btnComment
+
 // 게시글 삭제
 $("#btnDelete").click(function(){
-	if(!confirm('정말 삭제할까요?'))
-		return false;
+	//if(!confirm('정말 삭제할까요?'))
+	if(confirm('정말 삭제할까요?')==false)	return false;
 	$.ajax({
 		type:"DELETE",
 		url:"/delete/${board.num}",
 		success:function(resp){
-			if(resp=="success"){
-				alert(resp)
+				alert(resp+'번 글 삭제성공')
 				location.href="/list";
-			}
 		},
 		error:function(){
 			alert("삭제 실패")
@@ -67,5 +142,5 @@ $("#btnUpdate").click(function(){
 	location.href="/update/${board.num}"
 })  // btnUpdate
 
+init(); //script가 실행되자마자 실행되게 만들기 위해 선언
 </script>
-</div>
