@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.and()
 			.formLogin()
 			.loginPage("/login") //로그인 페이지를 지정  
-			.loginProcessingUrl("/loginPro")
+			.loginProcessingUrl("/loginPro")  // 로그인을 하면 넘어가는 페이지
 			.defaultSuccessUrl("/")  // 성공을 하면 /로 넘어가라
 		.and()
 			.logout()
