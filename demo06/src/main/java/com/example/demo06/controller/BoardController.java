@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo06.config.auth.PrincipalUser;
@@ -49,14 +52,29 @@ public class BoardController {
 //	}
 	
 	// 게시글 전체보기 : 페이징  ==> 페이징 정보 + data(게시글 정보)
+//	@GetMapping("list")
+//	//@PageableDefault : 페이징을 자동적으로 해주는 어노테이션 // size : 한 페이지에 나오는 게시글 수 
+//	public String list(Model model, @PageableDefault(size=5, sort="num", direction = Direction.DESC)Pageable pageable) {
+//		Page<Board>lists = boardService.findAll(pageable);  
+//		System.out.println("lists : "+lists);
+//		model.addAttribute("board", lists);
+//		model.addAttribute("count", boardService.count());
+//		return"/board/list";
+//	}
+	
+	// 게시글 전체보기 : 페이징, 검색
 	@GetMapping("list")
-	//@PageableDefault : 페이징을 자동적으로 해주는 어노테이션 // size : 한 페이지에 나오는 게시글 수 
-	public String list(Model model, @PageableDefault(size=5, sort="num", direction = Direction.DESC)Pageable pageable) {
-		Page<Board>lists = boardService.findAll(pageable);  
-		System.out.println("lists : "+lists);
+	public String list(Model model, @PageableDefault(size=5, sort="num", direction = Direction.DESC)Pageable pageable,
+			@RequestParam(required = false, defaultValue = "")String field,
+			@RequestParam(required = false, defaultValue = "")String word) {
+		
+		Page<Board> lists = boardService.findAll(field, word, pageable); 
+		Long count = boardService.count(field, word);
+		
 		model.addAttribute("board", lists);
-		model.addAttribute("count", boardService.count());
-		return"/board/list";
+		model.addAttribute("count", count);
+		 
+		return "/board/list";
 	}
 	
 	//상세보기
@@ -72,5 +90,20 @@ public class BoardController {
 	public Long delete(@PathVariable Long num) {
 		boardService.delete(num);
 		return num;
+	}
+	
+	// 수정폼
+	@GetMapping("update/{num}")
+	public String update(@PathVariable Long num, Model model) {
+		model.addAttribute("board", boardService.findById(num));
+		return "/board/update";
+	}
+	
+	// 수정
+	@PutMapping("update")
+	@ResponseBody
+	public String update(@RequestBody Board board) {
+		boardService.update(board);
+		return "success";
 	}
 }

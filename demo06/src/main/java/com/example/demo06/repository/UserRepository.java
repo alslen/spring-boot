@@ -11,4 +11,5 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	// 기본키는 이러한 쿼리 메서드를 선언하지 않아도 됨.
 	// select * from User(tbl_user6) where username='username'
 	User findByUsername(String username);  // select sql문 실행
+	
 }

@@ -1,5 +1,6 @@
 package com.example.demo06.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +33,41 @@ public class BoardService {
 		return boardRepository.findAll();
 	}
 	
-	// 페이징 포함 전체보기
-	public Page<Board> findAll(Pageable pageable) {
-
-		return boardRepository.findAll(pageable);
+//	// 페이징 포함 전체보기
+//	public Page<Board> findAll(Pageable pageable) {
+//
+//		return boardRepository.findAll(pageable);
+//	}
+	
+//	// 개수
+//	public Long count() {
+//		return boardRepository.count();
+//	}
+	
+	// 페이징 검색 전체보기
+	public Page<Board> findAll(String field, String word, Pageable pageable){
+		
+		Page<Board> lists = boardRepository.findAll(pageable);
+		if(field.equals("title")) {
+			lists = boardRepository.findByTitleContaining(word, pageable);  // Like == ...Containing
+		}
+		else if(field.equals("content")) {
+			lists = boardRepository.findByContentContaining(word, pageable);
+		}
+		return lists;
 	}
 	
-	// 개수
-	public Long count() {
-		return boardRepository.count();
+	// 페이징 검색 개수
+	public Long count(String field, String word) {
+		
+		Long count = boardRepository.count();
+		if(field.equals("title")) {
+			count = boardRepository.cntTitleSearch(word);  // Like == ...Containing
+		}
+		else if(field.equals("content")) {
+			count = boardRepository.cntContentSearch(word);
+		}
+		return count;
 	}
 	
 	// 상세보기
@@ -54,6 +81,16 @@ public class BoardService {
 	// 삭제
 	@Transactional
 	public void delete(Long num) {
-		boardRepository.deleteById(num);
+		//boardRepository.deleteById(num);  // deleteById : 기본키를 이용해서 삭제함.
+		boardRepository.deleteByNum(num);  // 기본키가 아니기 때문에 제공x -> repository에 선언해야함.
+	}
+	
+	// 수정 ==> 더터채킹을 해줘야함(영속성 컨텍스트에 있는 값을 가져와서 값을 수정해야함)
+	@Transactional
+	public void update(Board board) {
+		Board b = boardRepository.findById(board.getNum()).get();
+		b.setContent(board.getContent());
+		b.setTitle(board.getTitle());
+		b.setRegdate(new Date());  // 날짜 객체를 만들어서 강제적으로 날짜를 셋팅해줌.
 	}
 }

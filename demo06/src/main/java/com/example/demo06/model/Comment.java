@@ -14,6 +14,8 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +30,7 @@ public class Comment {
 	
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern="yyyy-MM-dd", timezone="Asia/Seoul")
 	private Date regdate;
 	
 	//bnum

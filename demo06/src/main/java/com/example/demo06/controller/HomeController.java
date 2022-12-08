@@ -1,12 +1,19 @@
 package com.example.demo06.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo06.config.auth.PrincipalUser;
 import com.example.demo06.model.User;
 import com.example.demo06.repository.UserRepository;
 import com.example.demo06.service.UserService;
@@ -47,4 +54,22 @@ public class HomeController {
 		userService.register(user);
 		return "success";
 	}
+	
+	// 회원변경 폼
+	@GetMapping("memberView")
+	public String view(Model model, @AuthenticationPrincipal PrincipalUser principal) {
+		model.addAttribute("user", userService.findById(principal.getUsername()));
+		return "/user/memberView";
+	}
+	
+	// 탈퇴
+	@DeleteMapping("memberDelete/{id}")
+	@ResponseBody
+	public String delete(@PathVariable Long id, HttpSession session) {
+		userService.delete(id);
+		session.invalidate();
+		return "success";
+	}
+	
+	// 수정
 }

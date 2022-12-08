@@ -1,12 +1,14 @@
 package com.example.demo06.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.demo06.config.auth.PrincipalUser;
 import com.example.demo06.model.User;
 import com.example.demo06.repository.UserRepository;
 
@@ -30,4 +32,13 @@ public class UserService{
 		userRepository.save(user);  // user에 들어있는 값을 DB에 insert
 	}
 	
+	// 회원정보 
+	public User findById(String username) {
+		return userRepository.findByUsername(username);
+	}
+	
+	// 삭제
+	public void delete(Long id) {
+		userRepository.deleteById(id);
+	}
 }
