@@ -5,6 +5,7 @@ import java.util.Date;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -45,7 +46,8 @@ public class Board {
 	private Long replyCnt;
 	
 	// 실행할 때 조인이 일어남
-	@OneToMany(mappedBy = "board")  // mappedBy를 지정하지 않으면 무한루프가 돌 수 있음/ board를 바라만 봐야함
+	// cascade = CascadeType.REMOVE : 게시판 글이 삭제되면 댓글도 삭제되게 만들었음
+	@OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)  // mappedBy를 지정하지 않으면 무한루프가 돌 수 있음/ board를 바라만 봐야함
 	@JsonIgnoreProperties("board")  // 한번 참조 했으면 무시함
 	private List<Comment> comments;  // 한 게시글에 여러 답글이 올 수 잇기 때문에 List형으로 선언
 	

@@ -15,7 +15,7 @@
 
 	<div class="form-group">
 		<label for="username">아이디:</label>
-		<input type="text" class="form-control" id="username" name="username" value="${user.username}"/>
+		<input type="text" class="form-control" id="username" name="username" value="${user.username}" readonly="readonly"/>
 	</div>
 	<div class="form-group">
 		<label for="password">비밀번호:</label>
@@ -30,6 +30,26 @@
 </div>
 
 <script>
+
+// 수정
+$("#btnUpdate").click(function(){
+	$.ajax({
+		type:'put',
+		url:'/memberUpdate',
+		contentType:'application/json;charset=utf-8',
+		data:JSON.stringify({"email" : $("#email").val(), "id" : $("#id").vala()}),
+		success:function(resp){
+			alert("수정완료")
+			location.href="/login"
+		},
+		error:function(e){
+			alert("수정실패")
+		}
+	})
+})  // btnUpdate
+
+
+// 삭제
 $("#btnDelete").click(function(){
 	if(!confirm('정말 탈퇴할까요?')) return false;
 	$.ajax({
@@ -44,4 +64,5 @@ $("#btnDelete").click(function(){
 		}
 	}) // ajax
 }) // btnDelete
+
 </script>

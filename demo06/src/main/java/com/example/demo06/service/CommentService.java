@@ -1,6 +1,7 @@
 package com.example.demo06.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -45,5 +46,18 @@ public class CommentService {
 		
 		List<Comment> clist = commentRepository.findByBnum(bnum);
 		return clist.size();
+	}
+	
+	// 댓글 삭제
+	@Transactional
+	public void delete(Long cnum) {
+		
+		// 댓글 개수 -1
+		 Optional<Comment> c = commentRepository.findById(cnum); // cnum을 통해서 Board객체를 구해옴.
+		Board b = c.get().getBoard(); 
+		b.setReplyCnt(b.getReplyCnt()-1);
+		
+		commentRepository.deleteById(cnum);
+		
 	}
 }

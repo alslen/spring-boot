@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.example.demo06.config.auth.PrincipalUser;
 import com.example.demo06.model.User;
@@ -72,4 +74,26 @@ public class HomeController {
 	}
 	
 	// 수정
+	@PutMapping("memberUpdate")
+	@ResponseBody
+	public String update(User user, HttpSession session) {
+		userService.update(user);
+		session.invalidate();
+		return "success";
+	}
+	
+	// 관리자 회원 목록
+	@GetMapping("memberList")
+	public String list(Model model) {
+		model.addAttribute("member", userService.findAll());
+		model.addAttribute("count", userService.getCount());
+		return "/user/memberList";
+	}
+	
+	// admin이 회원 삭제
+	@GetMapping("adminDelete/{id}")
+	public String adminDelete(@PathVariable Long id) {
+		userService.delete(id);
+		return "redirect:memberList";
+	}
 }

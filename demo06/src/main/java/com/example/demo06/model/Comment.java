@@ -30,7 +30,7 @@ public class Comment {
 	
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
-	@JsonFormat(pattern="yyyy-MM-dd", timezone="Asia/Seoul")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone="Asia/Seoul")
 	private Date regdate;
 	
 	//bnum

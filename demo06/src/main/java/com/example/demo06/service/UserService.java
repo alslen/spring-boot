@@ -1,5 +1,7 @@
 package com.example.demo06.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.demo06.config.auth.PrincipalUser;
 import com.example.demo06.model.User;
@@ -28,7 +31,7 @@ public class UserService{
 		String rawPassword = user.getPassword();
 		String encPassWord = encoder.encode(rawPassword);  // 비번을 암호화 시켜줌
 		user.setPassword(encPassWord);  // 암호화된 비번
-		user.setRole("ROLE_USER");  // 권한 직접 
+		user.setRole("ROLE_ADMIN");  // 권한 직접 
 		userRepository.save(user);  // user에 들어있는 값을 DB에 insert
 	}
 	
@@ -41,4 +44,22 @@ public class UserService{
 	public void delete(Long id) {
 		userRepository.deleteById(id);
 	}
+	
+	// 수정
+	public void update(User user) {
+		User u = userRepository.findById(user.getId()).get();
+		u.setEmail(user.getEmail());
+	}
+	
+	// 회원 목록
+	public List<User> findAll(){
+		
+		return userRepository.findAll();
+	}
+	
+	// 회원 수
+	public Long getCount() {
+		return userRepository.count();
+	}
+	
 }

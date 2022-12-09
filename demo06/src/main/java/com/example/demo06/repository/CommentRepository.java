@@ -18,7 +18,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long>{
 	public List<Comment> findByBnum(Long bnum);
 	
 	// 댓글 추가
-	@Modifying
+	@Modifying  // insert, update, delete를 할 때 써줘야하는 어노테이션
 	// nativeQuery = true : 우리가 알 수 있는 sql문을 사용할 수 있게 함.
 	@Query(value="insert into tbl_comment6(content,regdate,bnum,user_id) values(?1,now(),?2,?3)", nativeQuery = true) 
 	

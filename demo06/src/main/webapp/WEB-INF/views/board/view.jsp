@@ -45,6 +45,22 @@
 
 <script>
 
+// 댓글 삭제
+function fdel(cnum){
+	if(!confirm('정말 삭제하시겠습니까?')) return false;
+	$.ajax({
+		type:'delete',
+		url:'/reply/delete/'+cnum
+	})
+	.done(function(resp){
+		alert(resp+"번 댓글이 삭제되었습니다.")
+		init()
+	})
+	.fail(function(e){
+		alert("댓글 삭제 실패")
+	})
+}
+
 // 댓글 전체보기
 var init = function(){
 	$.ajax({
@@ -59,7 +75,9 @@ var init = function(){
 			str += "<td>"+val.user.username+"</td>"
 			str += "<td>"+val.content+"</td>"
 			str += "<td>"+val.regdate+"</td>"
-			str += "<td>삭제</td>"
+			if("${principal.user.id}"== val.user.id) {
+				str += "<td><a href='javascript:fdel("+val.cnum+")'>삭제</a></td>"
+			}
 			str += "</tr>"
 		})  // each
 		str += "</table>"

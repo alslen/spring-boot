@@ -33,6 +33,19 @@
      <li class="nav-item">
       <a class="nav-link" href="/board/list">BoardList</a>
     </li>
+      <li class="nav-item">
+	      <a class="nav-link" href="/file/insert">FileInsert</a>
+	    </li>
+	     <li class="nav-item">
+	      <a class="nav-link" href="/file/list">FileList</a>
+	    </li>
+	    
+	     <li class="nav-item">
+	      <a class="nav-link" href="/file2/insert">FileInsert22(properties)</a>
+	    </li>
+	     <li class="nav-item">
+	      <a class="nav-link" href="/file2/list">FileList22</a>
+	    </li>
   </ul>
   
   <ul class="navbar-nav">
@@ -43,7 +56,7 @@
 	     <li class="nav-item">
 	      <a class="nav-link" href="/register">회원가입</a>
 	    </li>
-	    </sec:authorize>
+	   </sec:authorize>
 	    
 	    <sec:authorize access="isAuthenticated()">
 	      <li class="nav-item">
@@ -52,6 +65,11 @@
 	    <li class="nav-item">
 	      <a class="nav-link" href="/memberView">회원변경</a>
 	    </li>
+	    <c:if test="${principal.user.role=='ROLE_ADMIN'}">
+		    <li class="nav-item">
+		      <a class="nav-link" href="/memberList">회원목록</a>
+		    </li>
+	    </c:if>
 	    </sec:authorize>
 	    
   </ul>
