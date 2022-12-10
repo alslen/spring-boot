@@ -37,7 +37,7 @@ $("#btnUpdate").click(function(){
 		type:'put',
 		url:'/memberUpdate',
 		contentType:'application/json;charset=utf-8',
-		data:JSON.stringify({"email" : $("#email").val(), "id" : $("#id").vala()}),
+		data:JSON.stringify({"email" : $("#email").val(), "id" : $("#id").val()}),
 		success:function(resp){
 			alert("수정완료")
 			location.href="/login"
